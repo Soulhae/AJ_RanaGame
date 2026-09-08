@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://23ttpanj4bc5"]
+
+[ext_resource type="Script" uid="uid://c1pj6jnd4c8ym" path="res://entities/player/player_controller.gd" id="1_0oqm6"]
+[ext_resource type="Texture2D" uid="uid://dt6oun7jr4j56" path="res://entities/player/sprites/image-removebg-preview.png" id="1_72s8x"]
+[ext_resource type="PackedScene" uid="uid://yx2fjok7xkbd" path="res://entities/tejo/tejo.tscn" id="2_fejr8"]
+[ext_resource type="Script" uid="uid://wh67xl5r3akx" path="res://utilities/state_machine/state_machine.gd" id="4_5sjox"]
+[ext_resource type="Script" uid="uid://dowh8830krd8q" path="res://entities/player/states/player_aiming.gd" id="5_byaf2"]
+[ext_resource type="Script" uid="uid://ccecbbol6qryk" path="res://entities/player/states/player_power.gd" id="6_xbtqd"]
+[ext_resource type="Script" uid="uid://hhiboojylaad" path="res://entities/player/states/player_release.gd" id="7_85ei1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_esmli"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_72s8x"]
+sky_material = SubResource("ProceduralSkyMaterial_esmli")
+
+[sub_resource type="Environment" id="Environment_43f5m"]
+background_mode = 2
+sky = SubResource("Sky_72s8x")
+
+[node name="Main" type="Node3D" unique_id=143393419]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1279929756]
+environment = SubResource("Environment_43f5m")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=110561754]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=318532583]
+use_collision = true
+size = Vector3(10, 1, 10)
+
+[node name="PlayerController" type="Node3D" parent="." unique_id=2080012763]
+script = ExtResource("1_0oqm6")
+tejo_scene = ExtResource("2_fejr8")
+
+[node name="Camera3D" type="Camera3D" parent="PlayerController" unique_id=1616243689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.90000004, 4)
+
+[node name="ThrowMarker" type="Marker3D" parent="PlayerController/Camera3D" unique_id=209003598]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, -0.4)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="PlayerController" unique_id=1446135308]
+
+[node name="TextureRect" type="TextureRect" parent="PlayerController/CanvasLayer" unique_id=2044704206]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -500.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("1_72s8x")
+flip_h = true
+
+[node name="StateMachine" type="Node" parent="PlayerController" unique_id=212080358 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("4_5sjox")
+initial_state = NodePath("PlayerAiming")
+metadata/_custom_type_script = "uid://wh67xl5r3akx"
+
+[node name="PlayerAiming" type="Node" parent="PlayerController/StateMachine" unique_id=1039930935]
+script = ExtResource("5_byaf2")
+metadata/_custom_type_script = "uid://dowh8830krd8q"
+
+[node name="PlayerPower" type="Node" parent="PlayerController/StateMachine" unique_id=1346588458]
+script = ExtResource("6_xbtqd")
+metadata/_custom_type_script = "uid://ccecbbol6qryk"
+
+[node name="PlayerRelease" type="Node" parent="PlayerController/StateMachine" unique_id=1156567945]
+script = ExtResource("7_85ei1")
+metadata/_custom_type_script = "uid://hhiboojylaad"

@@ -1,21 +1,25 @@
 extends Node
 class_name State
 
-# Sent when this state wants to switch to another state.
+# Se emite cuando este estado quiere cambiar a otro.
 signal transitioned(state: State, new_state_name: String)
 
-# Called when entering this state.
+# Al entrar al estado.
 func enter():
 	pass
 
-# Called when leaving this state.
+# Al salir del estado.
 func exit():
 	pass
 
-# Regular frame update.
+# Actualización por frame.
 func process(_delta: float):
 	pass
 
-# Physics update.
+# Actualización de física.
 func physics_process(_delta: float):
+	pass
+
+# Input no manejado, lo reenvía la máquina de estados.
+func _unhandled_input(_event: InputEvent):
 	pass
